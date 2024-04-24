@@ -8,8 +8,7 @@ let nameEvent;
 let DateEvent;
 let DescriptionEvent;
 
-
-mainProgram:while (true) {
+mainProgram: while (true) {
   // Sistema de gestion de eventos
 
   do {
@@ -54,79 +53,161 @@ mainProgram:while (true) {
           id: ++ids,
           nameEvent,
           DateEvent,
-          DescriptionEvent
+          DescriptionEvent,
         }
-      )
+      );
 
       eventList.push(newEvent);
 
-      console.log(eventList[eventList.length-1]);
+      console.log(eventList[eventList.length - 1]);
 
       alert("Evento registrado");
       break;
     case "2":
-      if(!eventList[0]){
-        alert("No existen eventos registrados")
-      }else{
+      if (!eventList[0]) {
+        alert("No existen eventos registrados");
+      } else {
         let message = "";
-        eventList.forEach((eventCurent, index) => message += `\n${index+1}. Nombre del evento: ${eventCurent.nameEvent}\nFecha del evento: ${eventCurent.DateEvent}\nDescripcion del evento: ${eventCurent.DescriptionEvent}\n`)
+        eventList.forEach(
+          (eventCurent, index) =>
+            (message += `\n${index + 1}. Nombre del evento: ${
+              eventCurent.nameEvent
+            }\nFecha del evento: ${
+              eventCurent.DateEvent
+            }\nDescripcion del evento: ${eventCurent.DescriptionEvent}\n`)
+        );
 
-        alert(`Lista de eventos\n${message}`)
+        alert(`Lista de eventos\n${message}`);
       }
       break;
     case "3":
-      if(!eventList.length){
-        alert("No existen eventos registrados")
-      }else{
+      if (!eventList.length) {
+        alert("No existen eventos registrados");
+      } else {
         let message = "";
-        const nameBySearch = prompt("Ingresa el nombre del evento que deseas consultar").trim().toLowerCase();
-        eventList.forEach((eventCurent) => {
-          if(eventCurent.nameEvent.includes(nameBySearch)){
-            message += `\nNombre del evento: ${eventCurent.nameEvent}\nFecha del evento: ${eventCurent.DateEvent}\nDescripcion del evento: ${eventCurent.DescriptionEvent}\n`}
-          }
+        const nameBySearch = prompt(
+          "Ingresa el nombre del evento que deseas consultar"
         )
-        if(!message){
-          alert("No existen eventos registrados con el nombre indicado")
-        }else{
-          alert(`Busqueda: ${nameBySearch}\n${message}`)
+          .trim()
+          .toLowerCase();
+        eventList.forEach((eventCurent) => {
+          if (eventCurent.nameEvent.includes(nameBySearch)) {
+            message += `\nNombre del evento: ${eventCurent.nameEvent}\nFecha del evento: ${eventCurent.DateEvent}\nDescripcion del evento: ${eventCurent.DescriptionEvent}\n`;
+          }
+        });
+        if (!message) {
+          alert("No existen eventos registrados con el nombre indicado");
+        } else {
+          alert(`Busqueda: ${nameBySearch}\n${message}`);
         }
       }
       break;
     case "4":
-      if(!eventList.length){
-        alert("No existen eventos registrados")
-      }else{
+      if (!eventList.length) {
+        alert("No existen eventos registrados");
+      } else {
         let message = "";
-        eventList.forEach((eventCurent, index) => message += `\n${index+1}. Nombre del evento: ${eventCurent.nameEvent}\nFecha del evento: ${eventCurent.DateEvent}\nDescripcion del evento: ${eventCurent.DescriptionEvent}\n`)
+        eventList.forEach(
+          (eventCurent, index) =>
+            (message += `\n${index + 1}. Nombre del evento: ${
+              eventCurent.nameEvent
+            }\nFecha del evento: ${
+              eventCurent.DateEvent
+            }\nDescripcion del evento: ${eventCurent.DescriptionEvent}\n`)
+        );
 
-        let indexByUpdate
+        let indexByUpdate;
 
-        do{
-          indexByUpdate = prompt(`Lista de eventos\n${message}\nEscribe el numero correspondiente en la lista al evento que deses actualizar: `)
-        }while(!/^[0-9]$/.test(indexByUpdate))
+        do {
+          indexByUpdate = prompt(
+            `Lista de eventos\n${message}\nEscribe el numero correspondiente en la lista al evento que deseas actualizar: `
+          );
+        } while (!/^[0-9]$/.test(indexByUpdate));
 
-        if(Number(indexByUpdate)-1 >= eventList.length){
-          alert("El evento no existe en la lista")
-        }else{
-          const nameForUpdate = prompt("Escribe el nombre al que deseas actualizar\nSi no deseas actualizar el nombre, solo presiona enter").toLowerCase();
-          let dateForUpdate = "2";
+        if (
+          Number(indexByUpdate) - 1 >= eventList.length ||
+          Number(indexByUpdate) - 1 < 0
+        ) {
+          alert("El evento no existe en la lista");
+        } else {
+          const nameForUpdate = prompt(
+            "Escribe el nombre al que deseas actualizar\nSi no deseas actualizar el nombre, solo presiona enter"
+          ).toLowerCase();
+
+          let dateForUpdate;
 
           do {
-            dateForUpdate = prompt("Escribe la fecha a la que deseas actualizar (YYYY-MM-DD)\nSi no deseas actualizar la fecha, solo presiona enter").toLowerCase();
+            dateForUpdate = prompt(
+              "Escribe la fecha a la que deseas actualizar (YYYY-MM-DD)\nSi no deseas actualizar la fecha, solo presiona enter"
+            ).toLowerCase();
           } while (
-            number(dateForUpdate) !== 0 && !/^[0-9-]{10}$/.test(DateEvent)
+            Number(dateForUpdate) !== 0 &&
+            (!dateForUpdate.includes("-") ||
+              dateForUpdate.split("-").length !== 3 ||
+              !/^[0-9-]{10}$/.test(dateForUpdate) ||
+              dateForUpdate.split("-")[0].length !== 4 ||
+              dateForUpdate.split("-")[1].length !== 2 ||
+              dateForUpdate.split("-")[2].length !== 2)
           );
 
-          const DescriptionForUpdate = prompt("Escribe la descripcion a la que deseas actualizar\nSi no deseas actualizar la descripcion, solo presiona enter").toLowerCase();
+          const DescriptionForUpdate = prompt(
+            "Escribe la descripcion a la que deseas actualizar\nSi no deseas actualizar la descripcion, solo presiona enter"
+          ).toLowerCase();
 
-          // eventList[indexByUpdate-1]
+          if (nameForUpdate)
+            eventList[indexByUpdate - 1].nameEvent = nameForUpdate;
+
+          if (dateForUpdate)
+            eventList[indexByUpdate - 1].DateEvent = dateForUpdate;
+
+          if (DescriptionForUpdate)
+            eventList[indexByUpdate - 1].DescriptionEvent =
+              DescriptionForUpdate;
+
+          alert("Actualizacion terminada");
         }
       }
       break;
     case "5":
+      if (!eventList.length) {
+        alert("No existen eventos registrados");
+      } else {
+        let message = "";
+        eventList.forEach(
+          (eventCurent, index) =>
+            (message += `\n${index + 1}. Nombre del evento: ${
+              eventCurent.nameEvent
+            }\nFecha del evento: ${
+              eventCurent.DateEvent
+            }\nDescripcion del evento: ${eventCurent.DescriptionEvent}\n`)
+        );
+
+        let indexByDelete;
+
+        do {
+          indexByDelete = prompt(
+            `Lista de eventos\n${message}\nEscribe el numero correspondiente en la lista al evento que deseas eliminar: `
+          );
+        } while (!/^[0-9]$/.test(indexByDelete));
+
+        if (
+          Number(indexByDelete) - 1 >= eventList.length ||
+          Number(indexByDelete) - 1 < 0
+        ) {
+          alert("El evento no existe en la lista");
+        } else {
+          // eventList = eventList.filter(
+          //   (element, index) => index !== indexByDelete - 1
+          // );
+          // console.log(eventList);
+
+          eventList.splice(indexByDelete - 1, 1);
+          alert("Evento eliminado");
+        }
+      }
       break;
     case "6":
-      alert("Ok que tengas un buen dia. Adios");
+      alert("Ok. Que tengas un buen dia. Adios");
       // exit = false;
       // break;
       break mainProgram;
