@@ -396,8 +396,211 @@ while (!exit) {
       productsInventory.splice(indexByDelete - 1, 1);
       alert("Producto eliminado");
       break;
+    case "5":
+      const productSell = questionWithStringVerification(
+        "Nombre del producto a vender"
+      );
+
+      const productSellFound = productsInventory.find(
+        (element) => element.productName === productSell
+      );
+
+      if (!productSellFound) {
+        alert("El producto no existe en el inventario");
+        break;
+      }
+
+      const quantitySell = questionWithNumberVerification("Cantidad a vender");
+
+      if (!quantitySell) {
+        alert("Has indicado 0, venta no realizada");
+        break;
+      }
+
+      if (productSellFound.productQuantity >= quantitySell) {
+        productSellFound.productQuantity -= quantitySell;
+        alert(
+          `Venta realizada\nStock del producto actualizado: ${productSellFound.productQuantity}`
+        );
+      }
+
+      break;
+    case "6":
+      const productBuy = questionWithStringVerification(
+        "Nombre del producto a comprar"
+      );
+
+      const productBuyFound = productsInventory.find(
+        (element) => element.productName === productBuy
+      );
+
+      if (!productBuyFound) {
+        alert("El producto no existe en el inventario");
+        break;
+      }
+
+      const quantityBuy = questionWithNumberVerification("Cantidad a comprar");
+
+      if (!quantityBuy) {
+        alert("Has indicado 0, compra no realizada");
+        break;
+      }
+
+      productBuyFound.productQuantity += quantityBuy;
+
+      alert(
+        `Compra realizada\nStock del producto actualizado: ${productBuyFound.productQuantity}`
+      );
+
+      break;
+    case "7":
+      const totalValueInventory = productsInventory.reduce(
+        (acc, currentElement) =>
+          (acc += currentElement.productQuantity * currentElement.productPrice),
+        0
+      );
+
+      alert(`Inventario valuado en: $${totalValueInventory}`);
+
+      break;
+    case "8":
+      orderProducts: while (true) {
+        const typeOrder = prompt(
+          `1. Ordenar productos por nombre\n2. Ordenar productos por precio\n3. Volver a atras`
+        );
+
+        switch (typeOrder) {
+          case "1":
+            while (true) {
+              const howToOrder = prompt(
+                `Como ordenar\n\n1. Ascendente \n2. Descendente`
+              );
+
+              if (howToOrder === "1") {
+                productsInventory.sort((elementA, elementB) =>
+                  elementB.productName.localeCompare(elementA.productName)
+                );
+
+                alert(showInventory(productsInventory, badWords));
+
+                break orderProducts;
+              } else if (howToOrder === "2") {
+                productsInventory.sort((elementA, elementB) =>
+                  elementA.productName.localeCompare(elementB.productName)
+                );
+
+                alert(showInventory(productsInventory, badWords));
+
+                break orderProducts;
+              } else {
+                alert("indica una opcion valida");
+              }
+            }
+
+          case "2":
+            while (true) {
+              const howToOrder = prompt(
+                `Como ordenar\n\n1. Ascendente \n2. Descendente`
+              );
+
+              if (howToOrder === "1") {
+                productsInventory.sort(
+                  (elementA, elementB) =>
+                    elementB.productPrice - elementA.productPrice
+                );
+
+                alert(showInventory(productsInventory, badWords));
+
+                break orderProducts;
+              } else if (howToOrder === "2") {
+                productsInventory.sort(
+                  (elementA, elementB) =>
+                    elementA.productPrice - elementB.productPrice
+                );
+
+                alert(showInventory(productsInventory, badWords));
+
+                break orderProducts;
+              } else {
+                alert("indica una opcion valida");
+              }
+            }
+
+          case "3":
+            break orderProducts;
+
+          default:
+            alert("indica una opcion valida");
+            break;
+        }
+      }
+      break;
     case "9":
       alert(showInventoryBlackList(blacklistedProducts));
+      break;
+    case "10":
+      // reporte general de productos:
+      //cantidad de productos
+
+      const quantityProducts = productsInventory.length;
+
+      //valor total del inventario
+
+      const totalValue = productsInventory.reduce(
+        (acc, currentElement) =>
+          (acc += currentElement.productQuantity * currentElement.productPrice),
+        0
+      );
+
+      //cantidad de productos más caros
+
+      //generamos una lista solo con los precios para luego filtar
+
+      const allPriceProducts = productsInventory.map(
+        (product) => product.productPrice
+      );
+
+      //filtramos preguntando por max/min
+
+      const expensiveProducts = allPriceProducts.filter(
+        (element) => element === Math.max(...allPriceProducts)
+      );
+
+      //cantidad de productos más baratos
+
+      const cheapestProducts = allPriceProducts.filter(
+        (element) => element === Math.min(...allPriceProducts)
+      );
+
+      //cantidad de productos con mayor cantidad disponible (metodo profe)
+
+      const mostAvailableProducts = productsInventory.filter(
+        (element) =>
+          element.productQuantity ===
+          Math.max(
+            ...productsInventory.map((element) => element.productQuantity)
+          )
+      );
+
+      //cantidad de productos con menor cantidad disponible
+
+      const leastAvailableProducts = productsInventory.filter(
+        (element) =>
+          element.productQuantity ===
+          Math.min(
+            ...productsInventory.map((element) => element.productQuantity)
+          )
+      );
+
+      //cantidad de productos con posibles malas palabras en la descripción.
+
+      const productsWithBadWords = blacklistedProducts.length;
+
+      //Mostrar balance general
+
+      alert(
+        `Balance general inventario\n\nCantidad de productos: ${quantityProducts}\nValor total del inventario: ${totalValue}\nCantidad de productos mas caros: ${expensiveProducts.length}\nCantidad de productos mas baratos: ${cheapestProducts.length}\nCantidad de productos con mas stock disponible: ${mostAvailableProducts.length}\nCantidad de productos con menos stock disponible: ${leastAvailableProducts.length}\nCantidad de productos con posibles malas palabras en su descripcion: ${productsWithBadWords}`
+      );
       break;
     case "11":
       exit = true;
